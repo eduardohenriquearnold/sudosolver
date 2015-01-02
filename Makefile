@@ -1,6 +1,6 @@
 CFLAGS=-Wall
 SRC=Sudoku.cpp Solver.cpp
-OBJ=$(subst .cpp,.o,$(srcs))
+OBJ=$(subst .cpp,.o,$(SRC))
 
 all: $(OBJ) main.cpp
 	g++ $(CFLAGS) $(OBJ) main.cpp -o main.out
