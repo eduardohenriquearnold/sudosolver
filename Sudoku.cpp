@@ -48,8 +48,8 @@ istream& operator>> (istream& in, Sudoku& s)
 	
 	//Fill table
 	int v;
-	for (int i(0); i<s.size(); i++)
-		for (int j(0); j<s.size(); j++)
+	for (int j(0); j<s.size(); j++)
+		for (int i(0); i<s.size(); i++)
 		{
 			in >> v >> ws;
 			s(i,j) = v;
@@ -64,9 +64,9 @@ ostream& operator<< (ostream& out, Sudoku& s)
 	out << s.size() << endl;
 	
 	//Output table
-	for (int i(0); i<s.size(); i++)
+	for (int j(0); j<s.size(); j++)
 	{
-		for (int j(0); j<s.size(); j++)
+		for (int i(0); i<s.size(); i++)
 			out << s(i,j) << " ";
 			
 		out << endl;	
@@ -93,10 +93,10 @@ SudokuIterator SudokuIterator::first()
 		return SudokuIterator(s, i, 0, type);
 	else if(type==1)
 		return SudokuIterator(s, 0, j, type);
-	else if (type==2)
+	else
 	{
-		int i1 = ((i+1) % NumElemPerGroup) * NumElemPerGroup;
-		int j1 = ((j+1) % NumElemPerGroup) * NumElemPerGroup;
+		int i1 = int(i / NumElemPerGroup) * NumElemPerGroup;
+		int j1 = int(j / NumElemPerGroup) * NumElemPerGroup;
 		return SudokuIterator(s, i1, j1, type);
 	}
 }
@@ -107,10 +107,10 @@ SudokuIterator SudokuIterator::last()
 		return SudokuIterator(s, i, s->size()-1, type);
 	else if(type==1)
 		return SudokuIterator(s, s->size()-1, j, type);
-	else if (type==2)
+	else
 	{
-		int i1 = ((i+1) % NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
-		int j1 = ((j+1) % NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
+		int i1 = int(i / NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
+		int j1 = int(j / NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
 		return SudokuIterator(s, i1, j1, type);
 	}
 }
@@ -131,24 +131,25 @@ SudokuIterator SudokuIterator::next()
 		else
 			return end();
 	}
-	else if (type==2)
+	else
 	{
 		int i1, j1;
-		if ( i % NumElemPerGroup != (i+1) % NumElemPerGroup)
+		if ( int(i / NumElemPerGroup) != int((i+1) / NumElemPerGroup))
 		{
-			i1 = (i % NumElemPerGroup) * NumElemPerGroup;
+			i1 = int(i / NumElemPerGroup) * NumElemPerGroup;
 			j1 = j+1;
+
+		        if ( int(j / NumElemPerGroup) == int((j+1) / NumElemPerGroup))
+			        return SudokuIterator(s, i1, j1, type);
+		        else
+		                return end();
 		}
 		else
 		{
 			i1 = i+1;
 			j1 = j;
-		}
-		
-		if ( j % NumElemPerGroup == (j+1) % NumElemPerGroup)
-			return SudokuIterator(s, i1, j1, type);
-		else
-		        return end();
+		        return SudokuIterator(s, i1, j1, type);
+		}		
 	}
 	
 }
@@ -169,24 +170,26 @@ SudokuIterator SudokuIterator::previous()
 		else
 			return end();
 	}
-	else if (type==2)
+	else
 	{
 		int i1, j1;
-		if ( i % NumElemPerGroup != (i-1) % NumElemPerGroup)
+		if ( int(i / NumElemPerGroup) != int((i-1) / NumElemPerGroup))
 		{
-			i1 = (i % NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
+			i1 = int(i / NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
 			j1 = j-1;
+			
+		        if ( int(j / NumElemPerGroup) == int((j-1) / NumElemPerGroup))
+		                return SudokuIterator(s, i1, j1, type);
+		        else
+		                return end();
 		}
 		else
 		{
 			i1 = i-1;
 			j1 = j;
+	                return SudokuIterator(s, i1, j1, type);
 		}
 		
-		if ( j % NumElemPerGroup == (j-1) % NumElemPerGroup)
-		        return SudokuIterator(s, i1, j1, type);
-		else
-		        return end();
 	}
 }
 

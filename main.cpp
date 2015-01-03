@@ -17,7 +17,15 @@ int main(int argc, char *argv[])
                 
                 
                 //Try to solve it
-                //s.solve();               
+                s.solve();               
+                
+                /*SudokuIterator it = s.getIterator(2,3,2).last();
+                while (it != it.end())
+                {
+                        cout << *it << endl;
+                        it--;
+                }
+                cout << endl;*/
 
                 //Display result
                 cout << s;

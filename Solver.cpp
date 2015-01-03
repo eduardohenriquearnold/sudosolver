@@ -31,7 +31,7 @@ void Solver::solve()
 	{
 	        bool vGrid=false;
 	        
-	        for (int val=(*(*it))+1; val<size() || vGrid; val++)
+	        for (int val=(*(*it))+1; val<=size() && !vGrid; val++)
 	        {
 	                *(*it) = val;
 	                vGrid = validGrid(*it);
@@ -44,7 +44,10 @@ void Solver::solve()
                         if (it == emptyCells.begin())
                                 throw string("Sudoku does not have a solution");
                         else
+                        {
+                                *(*it) = 0;
                                 it--;
+                        }
                 }
 	}
 	
