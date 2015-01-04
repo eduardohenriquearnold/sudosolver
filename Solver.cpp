@@ -9,7 +9,7 @@ bool Solver::validGrid(SudokuIterator& grdO)
         {
                 SudokuIterator grd = grdO.changeType(axis);
                 for (SudokuIterator it = grd.first(); it != grd.end(); it++)
-                        if ((*it) == (*grd) && it != grd)
+                        if (*it == *grd && it != grd)
                                 valid = false;
         }
         
@@ -31,9 +31,9 @@ void Solver::solve()
 	{
 	        bool vGrid=false;
 	        
-	        for (int val=(*(*it))+1; val<=size() && !vGrid; val++)
+	        for (int val=(**it)+1; val<=size() && !vGrid; val++)
 	        {
-	                *(*it) = val;
+	                **it = val;
 	                vGrid = validGrid(*it);
                 }
                 
@@ -45,7 +45,7 @@ void Solver::solve()
                                 throw string("Sudoku does not have a solution");
                         else
                         {
-                                *(*it) = 0;
+                                **it = 0;
                                 it--;
                         }
                 }
