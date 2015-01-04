@@ -4,10 +4,15 @@
 class Solver : public Sudoku
 {
 	private:
-		vector<SudokuIterator> emptyCells;
+		vector<SudokuIterator> emptyGrids;
+		vector<SudokuIterator>::iterator itEG;
 		bool validGrid(SudokuIterator&);
 		
 	public:
-		void solve();
+	        //Try to find a new solution to the Sudoku using BackTracking Algorithm. If finds one returns true, otherwise false
+		bool solveBT();
+		
+		//Count the number of possible solutions
+		int countSolutions();
 };
 

@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
                 
                 //Input sudoku        
                 Solver s;
-                file >> s;
+                file >> s;                
                 
-                
-                //Try to solve it
-                s.solve();               
+                //Try to solve it and display
+                while (s.solveBT())
+                        cout << s << endl;         
                 
                 /*SudokuIterator it = s.getIterator(2,3,2).last();
                 while (it != it.end())
@@ -27,8 +27,6 @@ int main(int argc, char *argv[])
                 }
                 cout << endl;*/
 
-                //Display result
-                cout << s;
         }
         catch (string e)
         {

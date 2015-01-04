@@ -16,40 +16,58 @@ bool Solver::validGrid(SudokuIterator& grdO)
         return valid; 
 }
 
-void Solver::solve()
+bool Solver::solveBT()
 {
-	//Enumerate empty cells
-	for (int i(0); i<size(); i++)
-		for (int j(0); j<size(); j++)
-		        if (operator()(i,j) == 0)
-                                emptyCells.push_back(getIterator(i, j, 2));
-		
-	//Start solving
-	vector<SudokuIterator>::iterator it = emptyCells.begin();
-	
-        while (it != emptyCells.end())
+	//Enumerate empty cells and sets iterator on first execution
+	if (emptyGrids.empty())
 	{
+	        for (int i(0); i<size(); i++)
+		        for (int j(0); j<size(); j++)
+		                if (operator()(i,j) == 0)
+                                        emptyGrids.push_back(getIterator(i, j, 2));
+                                        
+                itEG = emptyGrids.begin();
+        }        
+		
+	//Start solving		
+        while (itEG != emptyGrids.end())
+	{        
 	        bool vGrid=false;
 	        
-	        for (int val=(**it)+1; val<=size() && !vGrid; val++)
+	        for (int val=(**itEG)+1; val<=size() && !vGrid; val++)
 	        {
-	                **it = val;
-	                vGrid = validGrid(*it);
+	                **itEG = val;
+	                vGrid = validGrid(*itEG);
                 }
                 
+                //Check if Grid is correctly filled
                 if (vGrid)
-                        it++;
+                        itEG++;
                 else
                 {
-                        if (it == emptyCells.begin())
-                                throw string("Sudoku does not have a solution");
+                        if (itEG == emptyGrids.begin())
+                                //Sudoku has no solution from here further
+                                return false;
                         else
                         {
-                                **it = 0;
-                                it--;
+                                **itEG = 0;
+                                itEG--;
                         }
                 }
 	}
 	
-	cout << "Solved puzzle" << endl;
+	//Solution was found. Shift iterator back in case another solution is needed.
+	itEG--;
+	return true;
 }
+
+int Solver::countSolutions()
+{
+        int count = 0;
+        
+        while(solveBT())
+                count++;
+                
+        return count;
+}
+
