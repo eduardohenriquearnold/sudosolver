@@ -71,3 +71,13 @@ int Solver::countSolutions()
         return count;
 }
 
+void Solver::restore()
+{
+        //Sets empty grids to zero again
+        for (vector<SudokuIterator>::iterator it = emptyGrids.begin(); it != emptyGrids.end(); it++)
+                **it = 0;
+                
+        //Clear empty grids -> force them to be created again, in case grids are modified
+        emptyGrids.clear();
+}
+
