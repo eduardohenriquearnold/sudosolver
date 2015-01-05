@@ -1,4 +1,4 @@
-CFLAGS=-Wall
+CFLAGS=-Wall -std=c++11
 SRC=Sudoku.cpp Solver.cpp
 OBJ=$(subst .cpp,.o,$(SRC))
 

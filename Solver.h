@@ -15,7 +15,7 @@ class Solver : public Sudoku
 		//Count the number of possible solutions
 		int countSolutions();
 		
-                //Undo changes made by the solver. Need to be executed to get solutions a second time or before changing grids.
-		void restore();
+                //Clear empty grids content. Restore the original content before solving if restore is true
+		void clearHistory(bool restore=true);
 };
 

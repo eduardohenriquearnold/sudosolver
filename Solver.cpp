@@ -71,9 +71,10 @@ int Solver::countSolutions()
         return count;
 }
 
-void Solver::restore()
+void Solver::clearHistory(bool restore)
 {
         //Sets empty grids to zero again
+        if (restore)
         for (vector<SudokuIterator>::iterator it = emptyGrids.begin(); it != emptyGrids.end(); it++)
                 **it = 0;
                 
