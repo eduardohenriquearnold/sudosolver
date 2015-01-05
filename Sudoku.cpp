@@ -148,6 +148,7 @@ SudokuIterator SudokuIterator::next()
 		{
 			i1 = i+1;
 			j1 = j;
+			
 		        return SudokuIterator(s, i1, j1, type);
 		}		
 	}
@@ -173,12 +174,12 @@ SudokuIterator SudokuIterator::previous()
 	else
 	{
 		int i1, j1;
-		if ( int(i / NumElemPerGroup) != int((i-1) / NumElemPerGroup))
+		if ( int(i / NumElemPerGroup) != int((i-1) / NumElemPerGroup) || i==0)
 		{
 			i1 = int(i / NumElemPerGroup) * NumElemPerGroup + (NumElemPerGroup-1);
 			j1 = j-1;
 			
-		        if ( int(j / NumElemPerGroup) == int((j-1) / NumElemPerGroup))
+		        if ( int(j / NumElemPerGroup) == int(j1 / NumElemPerGroup) && j1!=-1)
 		                return SudokuIterator(s, i1, j1, type);
 		        else
 		                return end();
@@ -187,7 +188,11 @@ SudokuIterator SudokuIterator::previous()
 		{
 			i1 = i-1;
 			j1 = j;
-	                return SudokuIterator(s, i1, j1, type);
+			
+		        if ( i1 >= 0)
+			        return SudokuIterator(s, i1, j1, type);
+		        else
+		                return end();
 		}
 		
 	}

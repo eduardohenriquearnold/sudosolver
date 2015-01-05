@@ -111,15 +111,5 @@ int main(int argc, char *argv[])
         {
                 cout << "Invalid option. " << endl;
                 help();
-        }
-                
-        /*SudokuIterator it = s.getIterator(2,3,2).last();
-        while (it != it.end())
-        {
-                cout << *it << endl;
-                it--;
-        }
-        cout << endl;*/
-
-
+        }                
 }
