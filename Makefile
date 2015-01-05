@@ -3,12 +3,12 @@ SRC=Sudoku.cpp Solver.cpp
 OBJ=$(subst .cpp,.o,$(SRC))
 
 all: $(OBJ) main.cpp
-	g++ $(CFLAGS) $(OBJ) main.cpp -o main.out
+	g++ $(CFLAGS) $(OBJ) main.cpp -o sudosolver.out
 
 %.o: %.cpp
 	g++ $(CFLAGS) -c $< 
 	
 clean:
-	rm *.a
-	rm *.out
+	rm -r *.o
+	rm -r *.out
 
