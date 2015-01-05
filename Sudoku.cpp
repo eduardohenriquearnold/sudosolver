@@ -62,14 +62,22 @@ ostream& operator<< (ostream& out, Sudoku& s)
 {
 	//Output size
 	out << s.size() << endl;
-	
+
+        int sq = pow(s.size(), 1./2);
+        	
 	//Output table
 	for (int j(0); j<s.size(); j++)
 	{
 		for (int i(0); i<s.size(); i++)
+		{
 			out << s(i,j) << " ";
+			if ((i+1) % sq == 0)
+			        out << " ";
+		}
 			
 		out << endl;	
+		if ((j+1) % sq == 0)
+		        out << endl;
 	}
 	
 	return out;
