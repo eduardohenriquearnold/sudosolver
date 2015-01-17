@@ -14,6 +14,7 @@ void help()
                 cout << "Sudoku Solver and Generator." << endl
                      << "Use -s FILENAME to solve." << endl
                      << "Use -g SIZE CLUES to generate a unique solution puzzle." << endl
+                     << "Use -h to extended help" << endl
                      << "Created by Eduardo Arnold" << endl;
 }
 
@@ -106,6 +107,21 @@ int main(int argc, char *argv[])
                 }
                 
                 cout << s;                
+        }
+        /////////////
+        ///EXTENDED HELP
+        /////////////
+        if (option == "-h")
+        {
+                cout <<
+                        "To obtain all the solutions to a given puzzle, use `./sudosolver.out -s FILENAME` where FILENAME is the path to the file containing the puzzle. This file must contain the size of the Puzzle (number of cols/rows), 9 for the standard Sudoku followed by a line break. Next each cell should be described by its number (or 0 if it's a blank cell), with at least one space between cells and a optional line break between rows (to ease the visualization)."
+                     << endl << endl << 
+                        "To generate a puzzle, use `./sudosolver.out -g SIZE CLUES` where SIZE is the number of cols/rows, and CLUES is the number of cells that are already filled in. Note that there is a minimum value of CLUES that should be filled for a given SIZE puzzle in order to produce a unique solution Sudoku. The puzzle will be printed on the STDOUT, you can save it to a file to further solving by directing the output of the program to a file with `./sudosolver.out -g SIZE CLUES > FILEPATH`. "
+                     << endl << endl << 
+                        "Example:" << endl <<                      
+                        "./sudosolver.out -g 9 70 > mySudoku" << endl <<
+                        "./sudosolver.out -s mySudoku" << endl;
+
         }
         else
         {
