@@ -6,6 +6,7 @@
 #include <functional>
 #include <cstdlib>
 #include "Solver.h"
+#include "SudokuImg.h"
 
 using namespace std;
 
@@ -124,6 +125,17 @@ int main(int argc, char *argv[])
 
         }
         else
+        //////////////////
+        ////Process Image
+        //////////////////
+        if (option == "-i")
+        {
+                SudokuImg solver;
+                solver.parseImage(string(argv[2]));
+                cout << "Done" << endl;
+        }        
+        //No valid option
+        else        
         {
                 cout << "Invalid option. " << endl;
                 help();
