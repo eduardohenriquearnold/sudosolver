@@ -2,13 +2,55 @@
 
 bool SudokuImg::parseImage(string path)
 {
-        Mat img = imread(path, CV_LOAD_IMAGE_GRAYSCALE);
+        //Load image and preprocess it
+        Mat img = imread(path, CV_LOAD_IMAGE_GRAYSCALE);        
+        img = processImg(img);
         
-        Mat p = processImg(img);
-        imshow("processed Img", p);
-        waitKey();
+        //Get grid points
+        contour gridPoints = getGridPoints(img);
+        
+        //Set Sudoku size
+        size(sqrt(gridPoints.size()));
+        
+        for (int i=0; i<size(); i++)
+                for (int j=0; j<size(); j++)
+                {
+                        Mat charPatch = getCharPatch(img, gridPoints, i, j);
+                        operator()(i,j) = int(ocr.recognize(charPatch)) - int('0');
+                }
         
         return true;
+}
+
+void SudokuImg::trainOCR(string path)
+{
+        //Load image and preprocess it
+        Mat img = imread(path, CV_LOAD_IMAGE_GRAYSCALE);        
+        img = processImg(img);
+        
+        //Get grid points
+        contour gridPoints = getGridPoints(img);
+        
+        //Load target grid
+        while (path.back() != '.')
+                path.pop_back();
+        path.pop_back();
+        
+        fstream file(path, ios_base::in);       
+        file >> *this;
+        
+        //Add training data
+        ocr.clearTrainingVector();
+        for (int i=0; i<size(); i++)
+                for (int j=0; j<size(); j++)
+                {
+                        Mat charPatch = getCharPatch(img, gridPoints, i, j);
+                        char target = to_string(operator()(i,j)).back();
+                        ocr.addTrainingData(charPatch, target);
+                }
+                        
+        //Train OCR
+        ocr.train();
 }
 
 Mat SudokuImg::processImg(Mat i)
@@ -140,7 +182,10 @@ contour SudokuImg::getGridPoints(Mat i)
         auto compV = [](Point& p1, Point& p2) {return (p1.y<p2.y);};
         std::sort(gPoints.begin(), gPoints.end(), compV);
                 
-        int num = sqrt(gPoints.size());
+        double num = sqrt(gPoints.size());
+        if (int(num) != num)
+                throw string("Invalid number of grid points detected");                
+        
         auto compH = [](Point& p1, Point& p2) {return (p1.x<p2.x);};
         for (int i=0; i<num; i++)
                 std::sort(gPoints.begin()+num*i, gPoints.begin()+num*(i+1), compH);
@@ -159,4 +204,28 @@ contour SudokuImg::getGridPoints(Mat i)
 
         waitKey();
         */
+}
+
+Mat SudokuImg::getCharPatch(Mat img, contour& gdPts, int i, int j)
+{
+        //Src and Dst points
+        vector<Point> src, dst;
+
+        src.push_back(gdPts[10*j+i]);
+        src.push_back(gdPts[10*j+i+1]);
+        src.push_back(gdPts[10*(j+1)+i+1]);
+        src.push_back(gdPts[10*(j+1)+i]);
+        
+        dst.push_back(Point(0,0));
+        dst.push_back(Point(cSize.width,0));
+        dst.push_back(Point(cSize));
+        dst.push_back(Point(0,cSize.height));
+        
+        //Get transformation matrix
+        Mat transMat = getPerspectiveTransform(src, dst);
+        
+        //Perspective transform to adjust points
+        Mat chr;
+        warpPerspective(img, chr, transMat, cSize);
+        return chr;
 }

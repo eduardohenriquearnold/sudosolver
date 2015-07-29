@@ -1,6 +1,6 @@
 CFLAGS=-Wall -std=c++11 
 CFLAGS+=$(shell pkg-config --cflags --libs opencv)
-SRC=Sudoku.cpp Solver.cpp SudokuImg.cpp
+SRC=Sudoku.cpp Solver.cpp SudokuImg.cpp OCR.cpp
 OBJ=$(subst .cpp,.o,$(SRC))
 
 all: $(OBJ) main.cpp

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <functional>
 #include <cstdlib>
+
 #include "Solver.h"
 #include "SudokuImg.h"
 
@@ -15,7 +16,8 @@ void help()
                 cout << "Sudoku Solver and Generator." << endl
                      << "Use -s FILENAME to solve." << endl
                      << "Use -g SIZE CLUES to generate a unique solution puzzle." << endl
-                     << "Use -h to extended help" << endl
+                     << "Use -i FILENAME to detect an image puzzle." << endl
+                     << "Use -h to extended help." << endl
                      << "Created by Eduardo Arnold" << endl;
 }
 
@@ -115,10 +117,15 @@ int main(int argc, char *argv[])
         if (option == "-h")
         {
                 cout <<
-                        "To obtain all the solutions to a given puzzle, use `./sudosolver.out -s FILENAME` where FILENAME is the path to the file containing the puzzle. This file must contain the size of the Puzzle (number of cols/rows), 9 for the standard Sudoku followed by a line break. Next each cell should be described by its number (or 0 if it's a blank cell), with at least one space between cells and a optional line break between rows (to ease the visualization)."
-                     << endl << endl << 
-                        "To generate a puzzle, use `./sudosolver.out -g SIZE CLUES` where SIZE is the number of cols/rows, and CLUES is the number of cells that are already filled in. Note that there is a minimum value of CLUES that should be filled for a given SIZE puzzle in order to produce a unique solution Sudoku. The puzzle will be printed on the STDOUT, you can save it to a file to further solving by directing the output of the program to a file with `./sudosolver.out -g SIZE CLUES > FILEPATH`. "
-                     << endl << endl << 
+                        "To obtain all the solutions for a given puzzle, use `./sudosolver.out -s FILENAME` where FILENAME is the path to the file containing the puzzle. This file must contain the size of the Puzzle (number of cols/rows), 9 for the standard Sudoku followed by a line break. Next each cell should be described by its number (or 0 if it's a blank cell), with at least one space between cells and a optional line break between rows (to ease the visualization)." << endl << endl;
+                        
+                cout <<  "To generate a puzzle, use `./sudosolver.out -g SIZE CLUES` where SIZE is the number of cols/rows, and CLUES is the number of cells that are already filled in. Note that there is a minimum value of CLUES that should be filled for a given SIZE puzzle in order to produce a unique solution Sudoku. The puzzle will be printed on the STDOUT, you can save it to a file to further solving by directing the output of the program to a file with `./sudosolver.out -g SIZE CLUES > FILEPATH`. " << endl << endl;
+                
+                cout << "To solve a puzzle given by an image use `./sudosolver.out -i IMAGEPATH`. Note that for now only 9x9 puzzles are recognized." << endl << endl;
+                
+                cout << "To train the OCR for the image recognition part, use `./sudosolver.out -ocr IMAGEPATH` where IMAGEPATH is the path to the training image. Note that there should also be a file with the same name as the image but without extension that contains the Sudoku target text description (same format as output for the generated puzzles). " << endl << endl;
+                
+                cout <<
                         "Example:" << endl <<                      
                         "./sudosolver.out -g 9 70 > mySudoku" << endl <<
                         "./sudosolver.out -s mySudoku" << endl;
@@ -131,8 +138,25 @@ int main(int argc, char *argv[])
         if (option == "-i")
         {
                 SudokuImg solver;
+                
+                //Try to parse image
                 solver.parseImage(string(argv[2]));
-                cout << "Done" << endl;
+                
+                //Try to solve it and display
+                cout << "Solutions: " << endl;
+                while (solver.solveBT())
+                        cout << solver << endl;    
+                                                
+        }        
+        else
+        //////////////////
+        ////OCR Training
+        //////////////////
+        if (option == "-ocr")
+        {
+                SudokuImg solver;                
+                solver.trainOCR(string(argv[2]));                  
+                                                
         }        
         //No valid option
         else        
