@@ -10,7 +10,7 @@ bool SudokuImg::parseImage(string path)
         contour gridPoints = getGridPoints(img);
         
         //Set Sudoku size
-        size(sqrt(gridPoints.size()));
+        size(sqrt(gridPoints.size())-1);
         
         for (int i=0; i<size(); i++)
                 for (int j=0; j<size(); j++)
@@ -47,6 +47,10 @@ void SudokuImg::trainOCR(string path)
                         Mat charPatch = getCharPatch(img, gridPoints, i, j);
                         char target = to_string(operator()(i,j)).back();
                         ocr.addTrainingData(charPatch, target);
+                        
+                        cout << target << endl;
+                        imshow("target", charPatch);
+                        waitKey();
                 }
                         
         //Train OCR
@@ -164,7 +168,7 @@ contour SudokuImg::getGridPoints(Mat i)
         Mat linesX, linesY, intersec;
         linesX = getLines(i, 0);
         linesY = getLines(i, 1);
-        bitwise_and(linesX, linesY, intersec);
+        bitwise_and(linesX, linesY, intersec);        
         
         //Get Grid points by doing component analysis
         vector<contour> contours;
@@ -181,10 +185,10 @@ contour SudokuImg::getGridPoints(Mat i)
         //Sort points
         auto compV = [](Point& p1, Point& p2) {return (p1.y<p2.y);};
         std::sort(gPoints.begin(), gPoints.end(), compV);
-                
+                 
         double num = sqrt(gPoints.size());
         if (int(num) != num)
-                throw string("Invalid number of grid points detected");                
+                throw string("Invalid number of grid points detected: ")+to_string(gPoints.size())+string(" points detected");                
         
         auto compH = [](Point& p1, Point& p2) {return (p1.x<p2.x);};
         for (int i=0; i<num; i++)
@@ -202,14 +206,16 @@ contour SudokuImg::getGridPoints(Mat i)
         for (int j=0; j<gPoints.size(); j++)
                 putText(i, to_string(j), gPoints[j], FONT_HERSHEY_PLAIN, 1, 255);
 
+        imshow("grdPts", i);
         waitKey();
-        */
+        
+        */                
 }
 
 Mat SudokuImg::getCharPatch(Mat img, contour& gdPts, int i, int j)
 {
         //Src and Dst points
-        vector<Point> src, dst;
+        vector<Point2f> src, dst;
 
         src.push_back(gdPts[10*j+i]);
         src.push_back(gdPts[10*j+i+1]);

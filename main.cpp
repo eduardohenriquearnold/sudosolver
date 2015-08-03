@@ -139,13 +139,25 @@ int main(int argc, char *argv[])
         {
                 SudokuImg solver;
                 
+                try
+                {
                 //Try to parse image
                 solver.parseImage(string(argv[2]));
+                
+                cout << "Detected Puzzle:" << endl;
+                cout << solver << endl;
+                
+                exit(0);
                 
                 //Try to solve it and display
                 cout << "Solutions: " << endl;
                 while (solver.solveBT())
                         cout << solver << endl;    
+                }
+                catch (String s)
+                {
+                        cout << "Error: " << s << endl;
+                }
                                                 
         }        
         else
