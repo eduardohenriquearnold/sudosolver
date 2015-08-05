@@ -1,0 +1,4 @@
+/* Snippet from Jukka K. Korpela  at  http://stackoverflow.com/questions/19697033/styling-a-sudoku-grid/19699482#19699482*/
+table.sudoku { border-collapse: collapse; font-family: Calibri, sans-serif; font-size: 20px; }
+.sudoku colgroup, tbody { border: solid medium; }
+.sudoku td { border: solid thin; height: 1.4em; width: 1.4em; text-align: center; padding: 0; }

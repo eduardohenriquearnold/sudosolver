@@ -13,6 +13,14 @@
                         <input type="submit" value="Generate">
                 </div>
         </form>
+        
+        {% if grid %}                
+                <h1>Result</h1>
+                <center>
+                {% from 'base.html' import print_sudoku %}
+                {{ print_sudoku(grid) }}
+                </center>
+        {% endif %}
 
 </div>
 

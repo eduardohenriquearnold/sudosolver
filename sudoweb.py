@@ -17,8 +17,20 @@ def generate():
         if request.method == 'GET':
                 return render_template("generate.html")
         else:
-                emptyCellCount = irequest.form[u'empty-cell-count']
+                #Generate Sudoku
+                emptyCellCount = int(request.form[u'empty-cell-count'])
+                cellCount = 81-emptyCellCount
+                gen = subprocess.check_output(['./sudosolver.out', '-g', '9', str(cellCount)])
                 
+                #Format output
+                lns = gen.split('\n')
+                lns.pop(0)
+                grid = [row for row in lns if row != '']
+                grid = [x for row in grid for x in row.split(' ') if x!='']
+                grid = [x if x!='0' else '' for x in grid]
+                
+                #Return template
+                return render_template("generate.html", grid=grid)
                 
         
 @app.route('/about')
