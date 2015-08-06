@@ -13,7 +13,14 @@
     
     <!-- Bootstrap Core CSS -->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/inputfile.css" rel="stylesheet">
     <link href="static/css/sudoku.css" rel="stylesheet">
+    
+    <!-- jQuery Version 1.11.1 -->
+    <script src="static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/bootstrap.min.js"></script>
 
     <!-- Custom CSS -->
     <style>
@@ -45,14 +52,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">SudoSolver</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}">SudoSolver</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{{ url_for('index') }}">Home</a>
-                    </li>
                     <li>
                         <a href="{{ url_for('solve') }}">Solve</a>
                     </li>
@@ -79,12 +83,6 @@
 
     </div>
     <!-- /.container -->
-
-    <!-- jQuery Version 1.11.1 -->
-    <script src="static/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="static/js/bootstrap.min.js"></script>
 
 </body>
 
